@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '../components/authContext';
+import { useAuth } from './authContext';
 
 export default function Login() {
   const { user, signIn, logOut } = useAuth();
