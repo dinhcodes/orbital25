@@ -15,7 +15,7 @@ export default function RootLayout({
             <body className="flex">
               <SideMenu />
               <main className="flex-1 p-6">
-                <AuthProvider><ClientLayout>{children}</ClientLayout></AuthProvider>
+                <AuthProvider><ClientLayout></ClientLayout></AuthProvider>
                 <Header />
                 {children}
               </main>
