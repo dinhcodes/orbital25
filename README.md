@@ -9,7 +9,6 @@ git clone https://github.com/dinhcodes/orbital25.git
 
 First, install dependencies:
 ```bash
-cd .\next-js-app\
 npm install
 ```
 
