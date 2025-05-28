@@ -2,8 +2,14 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+Clone this git using:
+```bash
+git clone https://github.com/dinhcodes/orbital25.git
+```
+
 First, install dependencies:
 ```bash
+cd .\next-js-app\
 npm install
 ```
 
