@@ -24,3 +24,38 @@ body {
 header {
   font-size: 60px;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  --background: #050505;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #050505;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+  font-size: 60px;
+}
+
+.headerLink {
+  font-size: 20px;
+}
+
+#title {
+  font-size: 40px;
+}
