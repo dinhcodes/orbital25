@@ -1,8 +1,6 @@
 import './globals.css'
 import Header from '../components/header';
 import SideMenu from '../components/sideMenu';
-import { AuthProvider } from '../components/authContext';
-import ClientLayout from './clientLayout';
 
 export default function RootLayout({
     children,
