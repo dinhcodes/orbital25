@@ -40,7 +40,7 @@ export default function Login() {
     <div className="p-16 bg-gray-800 text-black flex flex-col gap-4 max-w-md mx-auto rounded-lg">
       {user ? (
         <>
-          <span>Hello, {user.displayName || user.email}</span>
+          <span className='text-white'>Hello, {user.displayName || user.email}</span>
           <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={logOut}>
             Log out
           </button>
