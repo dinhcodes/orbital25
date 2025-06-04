@@ -4,6 +4,7 @@ import { Card, SearchBar, Categories } from '@/components';
 import MainLayout from '../../components/mainLayout';
 import ad1 from '@/assets/ads/ad1.png';
 import { filterOptions } from '../../constants';
+import VouchersPage from '@/components/voucherList';
 
 export default function HomePage() {
           const categoryOptions = [
@@ -20,7 +21,6 @@ export default function HomePage() {
     <MainLayout>
       <div className="p-8">
         <h1 className="text-2xl font-bold mb-4">Welcome to Dealio</h1>
-        <p className="text-gray-600">App content goes here.</p>
         <SearchBar
           filters={filterOptions}
           onSearch={(query) => {console.log('Search query:', query);}}
@@ -38,10 +38,12 @@ export default function HomePage() {
           }}
         />
         <br></br>
-<Categories
-  categories={categoryOptions}
-  activeCategory="Food & Groceries"
-/>
+        <Categories
+          categories={categoryOptions}
+          activeCategory="Food & Groceries"
+        />
+
+          <VouchersPage></VouchersPage>
       </div>
     </MainLayout>
   );
