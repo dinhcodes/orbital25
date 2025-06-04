@@ -20,7 +20,6 @@ export default function HomePage() {
 
     <MainLayout>
       <div className="p-8">
-        <h1 className="text-2xl font-bold mb-4">Welcome to Dealio</h1>
         <SearchBar
           filters={filterOptions}
           onSearch={(query) => {console.log('Search query:', query);}}
