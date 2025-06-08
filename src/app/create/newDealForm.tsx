@@ -9,6 +9,7 @@ export default function AddVoucherForm() {
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [categories, setCategories] = useState('');
+  const [validUntil, setvalidUntil] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,7 +18,8 @@ export default function AddVoucherForm() {
       title,
       description,
       imageUrl,
-      categories: categories.split(',').map((c) => c.trim()), // convert to array
+      categories: categories.split(',').map((c) => c.trim()), // convert to array,
+      validUntil,
     };
 
     try {
@@ -27,6 +29,7 @@ export default function AddVoucherForm() {
       setDescription('');
       setImageUrl('');
       setCategories('');
+      setvalidUntil('');
     } catch (error) {
       console.error('Error adding document: ', error);
     }
@@ -61,6 +64,13 @@ export default function AddVoucherForm() {
         placeholder="Categories (comma-separated)"
         value={categories}
         onChange={(e) => setCategories(e.target.value)}
+        className="w-full border p-2 rounded"
+      />
+      <input
+        type="text"
+        placeholder="Expiry Date (Example: 'Exp. 8 June')"
+        value={validUntil}
+        onChange={(e) => setvalidUntil(e.target.value)}
         className="w-full border p-2 rounded"
       />
       <button

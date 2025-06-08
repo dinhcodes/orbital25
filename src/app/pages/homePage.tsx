@@ -4,7 +4,7 @@ import { Card, SearchBar, Categories } from '@/components';
 import MainLayout from '../../components/mainLayout';
 import ad1 from '@/assets/ads/ad1.png';
 import { filterOptions } from '../../constants';
-import VouchersPage from '@/components/voucherList';
+import DealsPage from '@/components/dealList';
 
 export default function HomePage() {
           const categoryOptions = [
@@ -42,7 +42,7 @@ export default function HomePage() {
           activeCategory="Food & Groceries"
         />
 
-          <VouchersPage></VouchersPage>
+          <DealsPage></DealsPage>
       </div>
     </MainLayout>
   );

@@ -5,34 +5,35 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/clientApp'; // your Firestore export
 import PostRow from './postRow'
 
-interface Voucher {
+interface Deal {
     id: string;
     title: string;
     description: string;
     imageUrl: string;
     categories: string[];
+    validUntil: string;
 }
 
-export default function VouchersPage() {
-  const [vouchers, setVouchers] = useState<Voucher[]>([]);
+export default function DealsPage() {
+  const [deals, setDeals] = useState<Deal[]>([]);
 
   useEffect(() => {
-    const fetchVouchers = async () => {
+    const fetchDeals = async () => {
       const querySnapshot = await getDocs(collection(db, 'Deals'));
-      const fetchedVouchers = querySnapshot.docs.map(doc => ({
+      const fetchedDeals = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      })) as Voucher[];
+      })) as Deal[];
 
-      setVouchers(fetchedVouchers);
+      setDeals(fetchedDeals);
     };
 
-    fetchVouchers();
+    fetchDeals();
   }, []);
 
   return (
     <div className="pt-8">
-      <PostRow posts={vouchers} />
+      <PostRow posts={deals} />
     </div>
   );
 }
