@@ -6,12 +6,13 @@ import MainLayout from '../../../components/mainLayout';
 
 export const dynamic = 'force-dynamic';
 
-interface Props {
-  params: Promise<{ id: string }>;
-}
-
-export default async function DealPage({ params }: Props) {
-  const { id } =  await params;
+type paramsType = Promise<{ id: string }>;
+export default async function DealPage({
+    params,
+}: {
+    params: paramsType;
+}) {
+  const { id } = await params;
 
   const docRef = doc(db, "Deals", id);
   const docSnap = await getDoc(docRef);
