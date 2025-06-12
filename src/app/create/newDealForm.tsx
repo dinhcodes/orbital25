@@ -42,14 +42,14 @@ export default function AddVoucherForm() {
         placeholder="Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="w-full border p-2 rounded"
+        className="w-full text-black border p-2 rounded"
         required
       />
       <textarea
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        className="w-full border p-2 rounded"
+        className="w-full text-black border p-2 rounded"
         required
       />
       <input
@@ -57,21 +57,21 @@ export default function AddVoucherForm() {
         placeholder="Image URL"
         value={imageUrl}
         onChange={(e) => setImageUrl(e.target.value)}
-        className="w-full border p-2 rounded"
+        className="w-full text-black border p-2 rounded"
       />
       <input
         type="text"
         placeholder="Categories (comma-separated)"
         value={categories}
         onChange={(e) => setCategories(e.target.value)}
-        className="w-full border p-2 rounded"
+        className="w-full text-black border p-2 rounded"
       />
       <input
         type="text"
         placeholder="Expiry Date (Example: 'Exp. 8 June')"
         value={validUntil}
         onChange={(e) => setvalidUntil(e.target.value)}
-        className="w-full border p-2 rounded"
+        className="w-full text-black border p-2 rounded"
       />
       <button
         type="submit"
