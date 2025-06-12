@@ -4,11 +4,13 @@ import { db } from "../../../firebase/clientApp"; // adjust path as needed
 import { notFound } from "next/navigation";
 import MainLayout from '../../../components/mainLayout';
 
+export const dynamic = 'force-dynamic';
+
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export default async function Page({ params }: Props) {
+export default async function DealPage({ params }: Props) {
   const { id } =  await params;
 
   const docRef = doc(db, "Deals", id);
