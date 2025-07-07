@@ -5,6 +5,16 @@ import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../firebase/clientApp'; // your firestore instance
 
 export default function AddVoucherForm() {
+  const categoryList = [
+    "Electronics", 
+    "Food & Beverages", 
+    "Graphic Design", 
+    "Groceries",
+    "Clothing & Apparel",
+    "Home & Kitchen",
+    "Sports",
+    "Travel",
+  ];
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -59,13 +69,25 @@ export default function AddVoucherForm() {
         onChange={(e) => setImageUrl(e.target.value)}
         className="w-full text-black border p-2 rounded"
       />
-      <input
-        type="text"
-        placeholder="Categories (comma-separated)"
+
+      <select 
+        required
         value={categories}
         onChange={(e) => setCategories(e.target.value)}
-        className="w-full text-black border p-2 rounded"
-      />
+        className="w-full text-black border p-2 rounded">
+
+        <option value="" disabled hidden>
+          -- Select a Category --
+        </option>
+      
+        {categoryList.map((category) => (
+          <option key={category} value={category}>
+            {category}
+          </option>
+        ))}
+
+      </select>
+
       <input
         type="text"
         placeholder="Expiry Date (Example: 'Exp. 8 June')"

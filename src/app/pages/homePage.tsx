@@ -5,16 +5,21 @@ import MainLayout from '../../components/mainLayout';
 import ad1 from '@/assets/ads/ad1.png';
 import { filterOptions } from '../../constants';
 import DealsPage from '@/components/dealList';
+import { useState } from 'react';
 
 export default function HomePage() {
           const categoryOptions = [
   "Electronics", 
-  "Food & Groceries", 
+  "Food & Beverages", 
   "Graphic Design", 
-  "Category 1",
-  "Category 2",
-  "Category 3",
+  "Groceries",
+  "Clothing & Apparel",
+  "Home & Kitchen",
+  "Sports",
+  "Travel",
 ];
+
+const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   return (
 
@@ -39,10 +44,11 @@ export default function HomePage() {
         <br></br>
         <Categories
           categories={categoryOptions}
-          activeCategory="Food & Groceries"
+          activeCategory={activeCategory ?? undefined}
+          onCategorySelect={(category) => setActiveCategory(category)}
         />
 
-          <DealsPage></DealsPage>
+          <DealsPage selectedCategory={activeCategory}></DealsPage>
       </div>
     </MainLayout>
   );

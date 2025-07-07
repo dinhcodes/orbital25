@@ -6,16 +6,24 @@ import { ChevronRightIcon, XMarkIcon } from '@heroicons/react/24/outline';
 interface CategoriesProps {
   categories: string[];
   activeCategory?: string;
+  onCategorySelect: (category: string) => void;
 }
 
-const Categories: React.FC<CategoriesProps> = ({ categories, activeCategory }) => {
+const Categories: React.FC<CategoriesProps> = ({
+  categories,
+  activeCategory,
+  onCategorySelect, // ✅ Destructured here
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const hasMore = categories.length > 3;
-
   const handleCategoryClick = (category: string) => {
     // Insert filtering logic here
-  };
+    if (activeCategory === category) {
+    onCategorySelect(""); // Deselect if clicked again
+  } else {
+    onCategorySelect(category); // Select new category
+  }
+};
 
   return (
     <>
@@ -57,7 +65,7 @@ const Categories: React.FC<CategoriesProps> = ({ categories, activeCategory }) =
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-              <h2 className="text-lg font-semibold text-gray-900">All Categories</h2>
+              <h2 className="text-lg font-semibold text-black">All Categories</h2>
               <button 
                 onClick={() => setIsModalOpen(false)}
                 className="text-gray-500 hover:text-gray-700 text-xl"
@@ -75,7 +83,7 @@ const Categories: React.FC<CategoriesProps> = ({ categories, activeCategory }) =
                       handleCategoryClick(category);
                       setIsModalOpen(false);
                     }}
-                    className="p-3 text-sm text-center rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors"
+                    className="p-3 text-sm text-center rounded-lg border border-gray-400 text-black hover:bg-gray-50 cursor-pointer transition-colors"
                   >
                     {category}
                   </button>

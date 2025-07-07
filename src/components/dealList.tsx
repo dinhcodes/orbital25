@@ -14,7 +14,11 @@ interface Deal {
     validUntil: string;
 }
 
-export default function DealsPage() {
+interface DealsPageProps {
+  selectedCategory: string | null;
+}
+
+export default function DealsPage({ selectedCategory }: DealsPageProps) {
   const [deals, setDeals] = useState<Deal[]>([]);
 
   useEffect(() => {
@@ -31,9 +35,13 @@ export default function DealsPage() {
     fetchDeals();
   }, []);
 
+  const filteredDeals = selectedCategory
+    ? deals.filter(deal => deal.categories.includes(selectedCategory))
+    : deals;
+
   return (
     <div className="pt-8">
-      <PostRow posts={deals} />
+      <PostRow posts={filteredDeals} />
     </div>
   );
 }
