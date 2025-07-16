@@ -1,4 +1,6 @@
 'use client';
+import { doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { db } from '../firebase/clientApp';
 
 import {
   createContext,
@@ -26,6 +28,8 @@ interface AuthContextType {
   signUpWithEmail: (email: string, password: string) => Promise<void>;
   loginWithEmail: (email: string, password: string) => Promise<void>;
   logOut: () => Promise<void>;
+  toggleBookmark: (postId: string) => Promise<void>;
+  getBookmarks: () => Promise<string[]>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -61,6 +65,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
     await signOut(auth);
   };
 
+  const toggleBookmark = async (postId: string) => {
+  if (!user) return;
+  const userRef = doc(db, 'users', user.uid);
+  const userSnap = await getDoc(userRef);
+  if (!userSnap.exists()) {
+    await setDoc(userRef, { bookmarks: [postId] });
+  } else {
+    const bookmarks: string[] = userSnap.data().bookmarks || [];
+    if (bookmarks.includes(postId)) {
+      await updateDoc(userRef, {
+        bookmarks: arrayRemove(postId),
+      });
+    } else {
+      await updateDoc(userRef, {
+        bookmarks: arrayUnion(postId),
+      });
+    }
+  }
+};
+
+const getBookmarks = async (): Promise<string[]> => {
+  if (!user) return [];
+  const userRef = doc(db, 'users', user.uid);
+  const userSnap = await getDoc(userRef);
+  return userSnap.exists() ? userSnap.data().bookmarks || [] : [];
+};
+
   return (
     <AuthContext.Provider
       value={{
@@ -69,6 +100,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         signUpWithEmail,
         loginWithEmail,
         logOut,
+        toggleBookmark,
+        getBookmarks,
       }}
     >
       {children}
