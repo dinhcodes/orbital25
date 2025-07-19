@@ -42,10 +42,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
       setUser(user);
-    });
-    return () => unsubscribe();
+
+      // ✅ Check if user doc exists, create if missing
+      const userRef = doc(db, 'users', user.uid);
+      const userSnap = await getDoc(userRef);
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          name: user.displayName ?? 'Anonymous',
+          email: user.email ?? '',
+          photoURL: user.photoURL ?? '',
+          createdAt: new Date(),
+        });
+      }
+    } else {
+      setUser(null);
+    }
+  });
+
+  return () => unsubscribe();
   }, []);
 
   const signInWithGoogle = async () => {

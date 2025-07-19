@@ -12,6 +12,7 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { db } from '@/firebase/clientApp';
+import { doc, updateDoc } from "firebase/firestore";
 
 interface ChatBoxProps {
   chatId: string;
@@ -54,6 +55,15 @@ export default function ChatBox({ chatId }: ChatBoxProps) {
       text: newMessage.trim(),
       senderId: user.uid,
       timestamp: serverTimestamp(),
+    });
+
+    // Update the chat document's lastMessage
+    const chatDocRef = doc(db, 'chats', chatId);
+    await updateDoc(chatDocRef, {
+      lastMessage: {
+        text: newMessage.trim(),
+        timestamp: serverTimestamp(),
+      },
     });
 
     setNewMessage('');

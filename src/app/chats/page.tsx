@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   collection,
   query,
   where,
   onSnapshot,
   orderBy,
+  doc,
+  getDoc,
   DocumentData,
   Timestamp,
 } from 'firebase/firestore';
@@ -26,10 +27,20 @@ interface ChatPreview {
   };
 }
 
+interface Deal {
+  title: string;
+}
+
+interface User {
+  name: string;
+}
+
 export default function ChatListPage() {
   const { user } = useAuth();
   const [chats, setChats] = useState<ChatPreview[]>([]);
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+  const [deals, setDeals] = useState<Record<string, Deal>>({});
+  const [users, setUsers] = useState<Record<string, User>>({});
 
   useEffect(() => {
     if (!user?.uid) return;
@@ -51,47 +62,104 @@ export default function ChatListPage() {
     return () => unsubscribe();
   }, [user?.uid]);
 
+  // Fetch deal titles when chats change
+  useEffect(() => {
+    chats.forEach(async (chat) => {
+      if (chat.dealId && !deals[chat.dealId]) {
+        try {
+          const dealDoc = await getDoc(doc(db, 'Deals', chat.dealId));
+          if (dealDoc.exists()) {
+            setDeals((prev) => ({
+              ...prev,
+              [chat.dealId]: { title: dealDoc.data().title },
+            }));
+          }
+        } catch (error) {
+          console.error('Error fetching deal:', error);
+        }
+      }
+    });
+  }, [chats, deals]);
+
+  // Fetch user names when chats change
+  useEffect(() => {
+  if (!user) return;
+
+  const fetchedUserIds = new Set(Object.keys(users));
+
+  const fetchUsers = async () => {
+    const newUsers: Record<string, User> = {};
+
+    await Promise.all(
+      chats.map(async (chat) => {
+        const otherUserId = chat.participants.find((id) => id !== user.uid);
+        if (!otherUserId || fetchedUserIds.has(otherUserId)) return;
+
+        try {
+          const userDoc = await getDoc(doc(db, 'users', otherUserId));
+          if (userDoc.exists()) {
+            const name = userDoc.data().name || 'Unknown';
+            newUsers[otherUserId] = { name };
+          } else {
+            console.warn('User not found:', otherUserId);
+          }
+        } catch (error) {
+          console.error('Error fetching user:', otherUserId, error);
+        }
+      })
+    );
+
+    setUsers((prev) => ({ ...prev, ...newUsers }));
+  };
+
+  fetchUsers();
+}, [chats, user]);
+
   if (!user) return <p>Please log in to see your chats.</p>;
 
   return (
     <MainLayout>
-        <div className="max-w-4xl mx-auto p-4 grid grid-cols-3 gap-4">
-        <div className="col-span-1 border rounded p-2 max-h-[80vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Your Chats</h2>
-            {chats.length === 0 ? (
+      <div className="flex h-[80vh] p-4 max-w-full">
+        <div className="w-80 min-w-[16rem] max-w-xs border-r p-2 overflow-y-auto">
+          <h2 className="text-xl font-bold mb-4">Your Chats</h2>
+          {chats.length === 0 ? (
             <p>No chats yet.</p>
-            ) : (
+          ) : (
             <ul className="space-y-2">
-                {chats.map((chat) => {
+              {chats.map((chat) => {
                 const otherUserId = chat.participants.find((id) => id !== user.uid) || 'Unknown';
                 return (
-                    <li
+                  <li
                     key={chat.id}
                     className={`p-2 rounded cursor-pointer ${
-                        chat.id === selectedChatId ? 'bg-gray-300' : 'hover:bg-gray-200'
+                      chat.id === selectedChatId ? 'bg-gray-800' : 'hover:bg-gray-900'
                     }`}
                     onClick={() => setSelectedChatId(chat.id)}
-                    >
-                    <p className="font-semibold">Deal: {chat.dealId}</p>
-                    <p className="text-sm">Chat with: {otherUserId}</p>
-                    <p className="text-xs text-gray-600 truncate">
-                        {chat.lastMessage?.text ?? 'No messages yet'}
+                  >
+                    <p className="font-semibold">
+                      Deal: {deals[chat.dealId]?.title ?? 'Loading deal...'}
                     </p>
-                    </li>
+                    <p className="text-sm">
+                      Chat with: {users[otherUserId]?.name ?? 'Loading user...'}
+                    </p>
+                    <p className="text-xs text-gray-600 truncate">
+                      {chat.lastMessage?.text ?? 'No messages yet'}
+                    </p>
+                  </li>
                 );
-                })}
+              })}
             </ul>
-            )}
+          )}
         </div>
 
-        <div className="col-span-2 border rounded p-2 max-h-[80vh] overflow-auto">
-            {selectedChatId ? (
+        <div className="flex-1 p-2 overflow-auto ml-4">
+          {selectedChatId ? (
             <ChatBox chatId={selectedChatId} />
-            ) : (
+          ) : (
             <p className="text-center text-gray-500 mt-20">Select a chat to start messaging</p>
-            )}
+          )}
         </div>
-        </div>
+      </div>
     </MainLayout>
   );
 }
