@@ -13,7 +13,8 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/firebase/clientApp';
 import { useAuth } from '@/components/authContext';
-import MainLayout from '../../components/mainLayout';
+import ChatBox from '@/components/ChatBox';
+import MainLayout from '@/components/mainLayout';
 
 interface ChatPreview {
   id: string;
@@ -27,8 +28,8 @@ interface ChatPreview {
 
 export default function ChatListPage() {
   const { user } = useAuth();
-  const router = useRouter();
   const [chats, setChats] = useState<ChatPreview[]>([]);
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user?.uid) return;
@@ -54,34 +55,42 @@ export default function ChatListPage() {
 
   return (
     <MainLayout>
-        <div className="max-w-2xl mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-6">Your Chats</h1>
-        {chats.length === 0 ? (
-            <p>No chats yet. Start a conversation by clicking "Chat" on a deal!</p>
-        ) : (
-            <ul className="space-y-4">
-            {chats.map((chat) => {
-                // Find the other participant to display
+        <div className="max-w-4xl mx-auto p-4 grid grid-cols-3 gap-4">
+        <div className="col-span-1 border rounded p-2 max-h-[80vh] overflow-y-auto">
+            <h2 className="text-xl font-bold mb-4">Your Chats</h2>
+            {chats.length === 0 ? (
+            <p>No chats yet.</p>
+            ) : (
+            <ul className="space-y-2">
+                {chats.map((chat) => {
                 const otherUserId = chat.participants.find((id) => id !== user.uid) || 'Unknown';
-
                 return (
-                <li
+                    <li
                     key={chat.id}
-                    className="p-4 border rounded cursor-pointer hover:bg-gray-100"
-                    onClick={() => router.push(`/chats/${chat.id}`)}
-                >
-                    <p className="font-semibold">Deal ID: {chat.dealId}</p>
-                    <p className="text-sm text-gray-700">
-                    Chat with: <span className="italic">{otherUserId}</span>
+                    className={`p-2 rounded cursor-pointer ${
+                        chat.id === selectedChatId ? 'bg-gray-300' : 'hover:bg-gray-200'
+                    }`}
+                    onClick={() => setSelectedChatId(chat.id)}
+                    >
+                    <p className="font-semibold">Deal: {chat.dealId}</p>
+                    <p className="text-sm">Chat with: {otherUserId}</p>
+                    <p className="text-xs text-gray-600 truncate">
+                        {chat.lastMessage?.text ?? 'No messages yet'}
                     </p>
-                    <p className="mt-1 text-gray-600">
-                    {chat.lastMessage?.text ?? 'No messages yet'}
-                    </p>
-                </li>
+                    </li>
                 );
-            })}
+                })}
             </ul>
-        )}
+            )}
+        </div>
+
+        <div className="col-span-2 border rounded p-2 max-h-[80vh] overflow-auto">
+            {selectedChatId ? (
+            <ChatBox chatId={selectedChatId} />
+            ) : (
+            <p className="text-center text-gray-500 mt-20">Select a chat to start messaging</p>
+            )}
+        </div>
         </div>
     </MainLayout>
   );
