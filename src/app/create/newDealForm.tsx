@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
-import { db } from '../../firebase/clientApp'; // your firestore instance
+import { db } from '../../firebase/clientApp'; // firestore instance
+import { useAuth } from '../../components/authContext';
 
 export default function AddVoucherForm() {
+  const { user } = useAuth();
   const categoryList = [
     "Electronics", 
     "Food & Beverages", 
@@ -24,12 +26,18 @@ export default function AddVoucherForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!user) {
+      alert('You must be logged in to add a voucher.');
+      return;
+    }
+
     const dealData = {
       title,
       description,
       imageUrl,
       categories: categories.split(',').map((c) => c.trim()), // convert to array,
       validUntil,
+      createdBy: user.uid,
     };
 
     try {

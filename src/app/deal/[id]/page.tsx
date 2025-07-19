@@ -3,8 +3,7 @@ import { getDoc, doc } from "firebase/firestore";
 import { db } from "../../../firebase/clientApp"; // adjust path as needed
 import { notFound } from "next/navigation";
 import MainLayout from '../../../components/mainLayout';
-
-export const dynamic = 'force-dynamic';
+import ChatButton from '@/components/chatButton';
 
 type paramsType = Promise<{ id: string }>;
 export default async function DealPage({
@@ -34,7 +33,7 @@ export default async function DealPage({
             <p className="text-gray-500 mt-2">Valid until: {data.validUntil}</p>
           </div>
           <div className="flex flex-col col-span-5 w-full h-64 bg-gray-800 rounded border-white p-4">
-            <button id="button" className="w-full bg-gray-400 rounded border-white">Buy</button>
+            <ChatButton dealId={id} sellerId={data.createdBy} />
             <p className="pt-4 text-left">Refund Policy: </p>
             <p className="pt-4 text-left">Depends on the seller’s decision.</p>
             <p className="text-left">Pay only at the meet-up for physical voucher</p>
