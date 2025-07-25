@@ -70,7 +70,7 @@ export default function ChatBox({ chatId }: ChatBoxProps) {
   };
 
   return (
-    <div className="mt-8 border rounded p-4 bg-gray-900">
+    <div className="mt-8 p-4 bg-gray-900">
       <h2 className="font-bold text-xl mb-2">Chat</h2>
       <div className="max-h-60 overflow-y-auto mb-4 space-y-1">
         {messages.map((msg) => (

@@ -20,6 +20,7 @@ export default function HomePage() {
 ];
 
 const [activeCategory, setActiveCategory] = useState<string | null>(null);
+const [searchQuery, setSearchQuery] = useState<string>('');
 
   return (
 
@@ -27,7 +28,7 @@ const [activeCategory, setActiveCategory] = useState<string | null>(null);
       <div className="p-8">
         <SearchBar
           filters={filterOptions}
-          onSearch={(query) => {console.log('Search query:', query);}}
+          onSearch={(query) => setSearchQuery(query)}
           onFiltersChange={(filters) => console.log('Filters:', filters)}
           placeholder="Search for products"
         />
@@ -48,7 +49,7 @@ const [activeCategory, setActiveCategory] = useState<string | null>(null);
           onCategorySelect={(category) => setActiveCategory(category)}
         />
 
-          <DealsPage selectedCategory={activeCategory}></DealsPage>
+          <DealsPage selectedCategory={activeCategory} searchQuery={searchQuery}></DealsPage>
       </div>
     </MainLayout>
   );

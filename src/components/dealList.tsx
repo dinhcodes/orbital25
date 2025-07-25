@@ -16,9 +16,10 @@ interface Deal {
 
 interface DealsPageProps {
   selectedCategory: string | null;
+  searchQuery: string | null;
 }
 
-export default function DealsPage({ selectedCategory }: DealsPageProps) {
+export default function DealsPage({ selectedCategory, searchQuery }: DealsPageProps) {
   const [deals, setDeals] = useState<Deal[]>([]);
 
   useEffect(() => {
@@ -35,9 +36,18 @@ export default function DealsPage({ selectedCategory }: DealsPageProps) {
     fetchDeals();
   }, []);
 
-  const filteredDeals = selectedCategory
-    ? deals.filter(deal => deal.categories.includes(selectedCategory))
-    : deals;
+  const filteredDeals = deals.filter((deal) => {
+    const matchesCategory = selectedCategory
+      ? deal.categories.includes(selectedCategory)
+      : true;
+
+    const matchesSearch = searchQuery
+      ? deal.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        deal.description.toLowerCase().includes(searchQuery.toLowerCase())
+      : true;
+
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <div className="pt-8">
