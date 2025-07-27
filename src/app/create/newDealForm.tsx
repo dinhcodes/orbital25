@@ -57,7 +57,7 @@ export default function AddVoucherForm() {
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 space-y-4">
       <input
         type="text"
-        placeholder="Title"
+        placeholder="Title (Max 100 Chars)"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         className="w-full text-black border p-2 rounded"
