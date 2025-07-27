@@ -61,6 +61,7 @@ export default function AddVoucherForm() {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         className="w-full text-black border p-2 rounded"
+        maxLength={100}
         required
       />
       <textarea
