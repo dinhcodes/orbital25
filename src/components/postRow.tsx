@@ -38,6 +38,11 @@ export default function PostRow({ posts }: Props) {
     setBookmarkedIds(updated);
   };
 
+  function formatDate(dateString: string) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
   return (
     <div className="p-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-6">
       {posts.map((post) => {
@@ -70,7 +75,7 @@ export default function PostRow({ posts }: Props) {
                   {post.categories.join(', ')}
                 </p>
                 <h2 className="text-lg font-semibold pb-2">{post.title}</h2>
-                <p className="text-gray-400">{post.validUntil}</p>
+                <p className="text-gray-400">Expires {formatDate(post.validUntil)}</p>
               </div>
             </Link>
           </div>

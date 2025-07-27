@@ -97,7 +97,7 @@ export default function AddVoucherForm() {
       </select>
 
       <input
-        type="text"
+        type="date"
         placeholder="Expiry Date (Example: 'Exp. 8 June')"
         value={validUntil}
         onChange={(e) => setvalidUntil(e.target.value)}
