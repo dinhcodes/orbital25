@@ -22,6 +22,7 @@ import {
 
 import { auth } from '../firebase/clientApp';
 
+// Setting up sign in options
 interface AuthContextType {
   user: User | null;
   signInWithGoogle: () => Promise<void>;
@@ -38,6 +39,7 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+// Logic for signing in
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
 
@@ -46,7 +48,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (user) {
       setUser(user);
 
-      // ✅ Check if user doc exists, create if missing
+      // Check if user doc exists, create if missing
       const userRef = doc(db, 'users', user.uid);
       const userSnap = await getDoc(userRef);
       if (!userSnap.exists()) {

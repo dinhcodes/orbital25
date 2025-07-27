@@ -25,7 +25,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="flex min-h-screen">
       <SideMenu />
-      <main className="flex-1 p-6">
+      <main className="flex-1 p-6 ml-16">
         <Header />
         {children}
       </main>

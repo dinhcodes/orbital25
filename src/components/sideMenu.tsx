@@ -9,7 +9,7 @@ export default function SideMenu() {
   const profileIsActive = pathname === '/profile'; // Check if currently on profile page
   const chatIsActive = pathname === '/chats'; // Check if currently on chat page
     return (
-      <nav className="w-16 h-screen bg-black text-white p-3 border-r border-gray-700">
+      <nav className="fixed w-16 h-screen bg-black text-white p-3 border-r border-gray-700">
         <h2 className="text-2xl font-bold mb-16">
           <Link href="/">
             <svg height="40" width="40">
